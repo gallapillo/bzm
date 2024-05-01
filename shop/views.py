@@ -1,13 +1,21 @@
 from django.shortcuts import render
+from django.views.generic import ListView
+
 from shop.models import *
 
 
-def index(request):
-    products = Product.objects.all()
-    context = {
-        "products": products
-    }
-    return render(request, 'shop/index.html', context=context)
+# def index(request):
+#     products = Product.objects.all()
+#     context = {
+#         "products": products
+#     }
+#     return render(request, 'shop/index.html', context=context)
+
+class ProductListView(ListView):
+    model = Product
+    template_name = "shop/index.html"
+    context_object_name = "products"
+    paginate_by = 12
 
 
 def product_detail(request, id):
