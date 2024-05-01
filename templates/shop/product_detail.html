@@ -23,7 +23,9 @@
                             <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
                             <button class="btn btn-outline-dark flex-shrink-0" id="add-button" type="button">
                                 <i class="bi-cart-fill me-1"></i>
-                                В корзину
+                                <span id="add-button-text">
+                                    В корзину
+                                </span>
                             </button>
                         </div>
                     </div>
@@ -141,15 +143,14 @@
     $(document).on('click', '#add-button', function (e) {
         e.preventDefault();
 
-        var vars = $('#inputQuantity').val();
-        console.log(vars)
+        let qty = $('#inputQuantity').val();
 
         $.ajax({
             type: 'POST',
             url: '/cart/add',
             data: {
                 product_id: '{{ product.id }}',
-                product_qty: $('#inputQuantity').val(),
+                product_qty: qty,
                 csrfmiddlewaretoken: '{{ csrf_token }}',
                 action: 'post'
             },
@@ -159,7 +160,13 @@
                 document.getElementById('label-cart-count').textContent = response.qty
                 {#const add_button = document.getElementById('add-button')#}
                 {#add_button.disabled = true#}
-                {#add_button.innerText = "Added to cart"#}
+                if (qty > 0)
+                    document.getElementById('add-button-text').innerText = 'В корзине'
+                else {
+                    document.getElementById('add-button-text').innerText = 'В корзину'
+                    $('#inputQuantity').val(1)
+                }
+
                 {#add_button.className = "btn btn-success btn-sm"#}
 
             },
