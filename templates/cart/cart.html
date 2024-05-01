@@ -1,0 +1,177 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% load filters %}
+
+{% block content %}
+<main class="pt-5">
+  <div class="container">
+    <h1 class="h5">Корзина</h1>
+
+    <hr />
+
+    {% for item in cart %}
+    {% with product=item.product %}
+
+
+    <br />
+
+    <div class="row mb-4 border product-item">
+      <div class="col-md-3 col-lg-2 order-md-first bg-light">
+        <img
+          class="img-fluid mx-auto d-block"
+          width="200px"
+          alt="Responsive image"
+          src="{{ product.image.url }}"
+        />
+      </div>
+
+      <div class="col-md-9 col-lg-10 ps-md-3 ps-lg-10">
+        <a
+          href="/product/{{ product.id }}"
+          class="text-info text-decoration-none"
+        >
+          <h1 class="h5 pt-2">{{product.name}}</h1>
+        </a>
+
+        <div class="border">
+          <div class="col border-bottom">
+            <div class="row p-3">
+              <div class="col-6">Product</div>
+              <div class="col-6 text-end">
+                    {% if product.discount > 0 %}
+                    <span class="text-decoration-line-through">{{ product.price|get_full_qty_price:item.qty }} P</span>
+                    <span>{{ product.get_discount_price|get_full_qty_price:item.qty }} P</span>
+                    {% else %}
+                    <span> {{ product.price }} P</span>
+                    {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="row p-3">
+              <div class="col-12">
+                <label for="select">Количество: </label>
+
+                &nbsp;
+
+                <input class="form-control text-center me-3" id="inputQuantity" type="num" value="{{ item.qty }}" style="max-width: 3rem" />
+
+                <br />
+                <br />
+
+                <button
+                  type="button"
+                  data-index="{{ product.id }}"
+                  class="btn btn-primary btn-sm update-button"
+                >
+                  Обновить
+                </button>
+
+                &nbsp;
+
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm delete-button"
+                  data-index="{{ product.id }}"
+                >
+                  Удалить
+                </button>
+
+
+              </div>
+
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    {% endwith %}
+    {% endfor %}
+
+    <div class="col-12 text-end">
+      <div class="h6 fw-bold">
+        Всего:
+        <div id="total" class="d-inline-flex">
+           {{ cart.get_total_price }}
+        </div>
+          P
+      </div>
+      <button
+                  type="button"
+                  class="btn btn-success btn-md text-bg-light mt-4"
+
+                >
+          {# TOOD: CHECKOUT #}
+                <a class="nav-link text-decoration-none" href="">Заказ</a>
+                </button>
+    </div>
+  </div>
+
+  <br />
+  <br />
+</main>
+
+<script>
+
+    $(document).on('click', '.delete-button', function(e){
+        e.preventDefault();
+
+        $.ajax({
+            type: 'POST',
+            url: '/cart/delete',
+            data: {
+                product_id: $(this).data('index'),
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
+            success: function(response){
+                document.getElementById('label-cart-count').textContent = response.qty
+                document.getElementById('total').textContent = response.total
+
+                location.reload()
+            },
+            error: function(error, status){
+                console.log(error)
+            }
+        })
+    });
+
+    $(document).on('click', '.update-button', function(e){
+        e.preventDefault();
+
+        var product_id = $(this).data('index')
+
+        $.ajax({
+            type: 'POST',
+            url: "/cart/update",
+            data: {
+                product_id: $(this).data('index'),
+                product_qty: $('#inputQuantity').val(),
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
+            success: function(response){
+                document.getElementById('label-cart-count').textContent = response.qty
+                document.getElementById('total').textContent = response.total
+
+                location.reload()
+            },
+            error: function(error, status){
+                console.log(error)
+            }
+        })
+    });
+
+
+
+
+
+</script>
+{% endblock content %}
