@@ -1,17 +1,19 @@
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
+
 from .forms import NewUserForm
+from .models import Profile
 
 
 def register(request):
-    print(f"1 {request.method}")
     if request.method == "POST":
         form = NewUserForm(request.POST)
-        print(f"2 {form.is_valid()} - {form.errors}")
         if form.is_valid():
             user = form.save()
             login(request, user)
+            profile_obj = Profile(user=user)
+            profile_obj.save()
             return redirect('/')
     form = NewUserForm()
     context = {
@@ -22,7 +24,4 @@ def register(request):
 
 @login_required
 def profile(request):
-    context = {
-
-    }
-    return render(request, "users/profile.html", context=context)
+    return render(request, "users/profile.html")

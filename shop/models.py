@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -17,6 +18,7 @@ class Category(models.Model):
 class Brand(models.Model):
     name = models.CharField(max_length=100, verbose_name="Имя бренда")
     description = models.CharField(max_length=200, verbose_name="Описание бренда", blank=True)
+    is_available_in_region = models.BooleanField(default=False, verbose_name="Оффициален в России")
 
     def __str__(self) -> str:
         return f"{self.name}"
@@ -33,9 +35,9 @@ class Product(models.Model):
     price = models.IntegerField(verbose_name="Цена")
     description = models.CharField(max_length=200, verbose_name="Описание товара")
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="Категория", blank=True,
-                                    default=None, null=True)
+                                 default=None, null=True)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, verbose_name="Бренд", blank=True, default=None,
-                                 null=True)
+                              null=True)
     image = models.ImageField(blank=True, upload_to="product_images", verbose_name="Картинка товара")
     discount = models.IntegerField(default=0, verbose_name="Скидка")
     in_stock = models.BooleanField(default=True, verbose_name="В наличии")
