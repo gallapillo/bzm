@@ -43,6 +43,9 @@ class Product(models.Model):
     in_stock = models.BooleanField(default=True, verbose_name="В наличии")
     draft = models.BooleanField(default=False, verbose_name="Черновик")
 
+    def get_discount_price(self):
+        return self.price - (self.price * (self.discount * 0.01))
+
     def __str__(self) -> str:
         return f"Продукт {self.name} : Цена {self.price}"
 
