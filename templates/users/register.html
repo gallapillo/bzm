@@ -1,0 +1,29 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% load filters %}
+{% block content %}
+    <form method="post" class="">
+        {% csrf_token %}
+        {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+        {% endif %}
+        <p>{{ form.email }}</p>
+        <p>{{ form.username }}</p>
+        <p>{{ form.password1 }}</p>
+        <p>{{ form.password2 }}</p>
+        <button type="submit">Регистрация</button>
+    </form>
+
+
+{% endblock content %}
