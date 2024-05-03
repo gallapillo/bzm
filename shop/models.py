@@ -16,9 +16,22 @@ class Category(models.Model):
 
 
 class Brand(models.Model):
+    CHOICES = (
+        ('США', 'US'),
+        ('Франция', 'FR'),
+        ('Китай', 'CN'),
+        ('Россия', 'RU'),
+        ('Германия', 'GE'),
+        ('Италия', 'IT'),
+        ('Япония', 'JP'),
+    )
+
     name = models.CharField(max_length=100, verbose_name="Имя бренда")
     description = models.CharField(max_length=200, verbose_name="Описание бренда", blank=True)
+    country = models.CharField(max_length=100, verbose_name="Страна бренда", blank=True, choices=CHOICES)
     is_available_in_region = models.BooleanField(default=False, verbose_name="Оффициален в России")
+
+
 
     def __str__(self) -> str:
         return f"{self.name}"
