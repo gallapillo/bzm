@@ -76,7 +76,7 @@ def category_detail(request, id):
     product_name = request.GET.get("search")
     brand_name = request.GET.get("brand")
 
-    // TODO: DO IN PYCHARM BETTER
+    # TODO: DO IN PYCHARM BETTER
     if brand_name != '' and brand_name is not None:
         pass
 
