@@ -74,6 +74,11 @@ def category_detail(request, id):
     page_obj = products = Product.objects.filter(category=category)
 
     product_name = request.GET.get("search")
+    brand_name = request.GET.get("brand")
+
+    // TODO: DO IN PYCHARM BETTER
+    if brand_name != '' and brand_name is not None:
+        pass
 
     if product_name != '' and product_name is not None:
         page_obj = products.filter(name__icontains=product_name)
