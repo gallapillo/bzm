@@ -16,6 +16,7 @@
           <ul class="dropdown-menu text-small" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(0.5px, 34px, 0px);" data-popper-placement="bottom-end">
             <li><div class="dropdown-item">{{ user.username }}</div></li>
             <li><a class="dropdown-item" href="/users/profile">Профиль</a></li>
+            <li><a class="dropdown-item" href="/order/">Заказы</a></li>
             <li><a class="dropdown-item" href="/cart/">Корзина: <span id="label-cart-count">
                 {% with cart_qty=cart|length %}
                     {% if cart_qty > 0 %}
