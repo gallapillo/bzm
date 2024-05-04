@@ -69,19 +69,17 @@ def categories(request):
     return render(request, "shop/category/categories.html", context=context)
 
 
-def category_detail(request, id):
+def category_detail(request, id, brand_id):
     category = Category.objects.get(id=id)
     page_obj = products = Product.objects.filter(category=category)
 
     product_name = request.GET.get("search")
-    brand_name = request.GET.get("brand")
 
-    # TODO: DO IN PYCHARM BETTER
-    if brand_name != '' and brand_name is not None:
-        pass
+    if brand_id != '' and brand_id is not None:
+        page_obj = products.filter(brand__in=str(brand_id))
 
     if product_name != '' and product_name is not None:
-        page_obj = products.filter(name__icontains=product_name)
+        page_obj = products.filter(name__icontains=product_name, brand__in=str(brand_id))
 
     paginator = Paginator(page_obj, 12)
     page_number = request.GET.get('page')
