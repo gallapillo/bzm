@@ -4,9 +4,9 @@ from django.shortcuts import render
 
 @login_required
 def orders_list(request):
-    return render(request, "order/checkout.html")
+    return render(request, "order/order.html")
 
 
 @login_required
 def checkout(request):
-    return render(request, "order/order.html")
+    return render(request, "order/checkout.html")
